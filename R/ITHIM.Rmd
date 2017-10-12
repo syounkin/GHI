@@ -94,7 +94,7 @@ p + geom_bar(stat = "identity") + labs(y = "Sample Size (Referent Group)", x = "
 ## Non-Travel METs
 
 ```{r newMETs, echo = TRUE, eval = TRUE, echo = FALSE}
-newMETsFile <- "~/GHI/data/ATUS_to_METS_key.csv"
+newMETsFile <- 'https://raw.githubusercontent.com/vargovargo/ACS_ITHIM/master/ATUS_to_METS_key.csv'
 
 #newMETsFile <- system.file(newMETsFile, package="ITHIM")
 
@@ -164,16 +164,16 @@ dimnames(metKeyMatrix) <- list( NULL, activities)
 
 METs <- data.frame(METs = rowSums(summaryList$Data[,activities] * metKeyMatrix[,activities], na.rm = TRUE), AGE = summaryList$metaData$TEAGE, SEX = summaryList$metaData$TESEX, AGECAT = summaryList$metaData$AGECAT, row.names = summaryList$metaData$TUCASEID )
 
-D <- merge(cps, METs, by.y = "row.names", by.x = "TUCASEID")
-ggplot(D, aes(x = METs, ..density.., colour = AGECAT)) + geom_freqpoly(binwidth = 10) + facet_grid( SEX ~ .) + labs(x = "Non-Travel Marginal MET-hrs./week", colour = "Age") + coord_cartesian(xlim = c(0, 400))
+cps %>% merge(METs, by.y = "row.names", by.x = "TUCASEID") %>% 
+ggplot(aes(x = METs, ..density.., colour = AGECAT)) + geom_freqpoly(binwidth = 10) + facet_grid( SEX ~ .) + labs(x = "Non-Travel Marginal MET-hrs./week", colour = "Age") + coord_cartesian(xlim = c(0, 400))
+
 
 ```
 
 ```{r parameters, eval = TRUE, echo = FALSE}
-parameters <- ddply(D, .(SEX, AGECAT), summarise,
-             mean = mean(METs, na.rm=T),
-             sd = sd(METs, na.rm=T)
-             )
+parameters <- cps %>% merge(METs, by.y = "row.names", by.x = "TUCASEID") %>% group_by(SEX, AGECAT) %>% 
+summarise(mean = mean(METs, na.rm=T), sd = sd(METs, na.rm=T))
+
 
 METmatrix <- rbind(matrix(0,nrow = 2, ncol = 2), matrix(parameters$mean, ncol = 2))
 
