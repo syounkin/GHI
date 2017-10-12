@@ -94,7 +94,7 @@ p + geom_bar(stat = "identity") + labs(y = "Sample Size (Referent Group)", x = "
 ## Non-Travel METs
 
 ```{r newMETs, echo = TRUE, eval = TRUE, echo = FALSE}
-newMETsFile <- "~/GHI/data/ATUS_to_METS_key.csv"
+newMETsFile <- 'https://raw.githubusercontent.com/vargovargo/ACS_ITHIM/master/ATUS_to_METS_key.csv'
 
 #newMETsFile <- system.file(newMETsFile, package="ITHIM")
 
